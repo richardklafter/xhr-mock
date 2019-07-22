@@ -26,7 +26,12 @@ export function parseURL(url: string): MockURL {
     return urlObject;
   }
 
-  const parsedURL = parse(url, true);
+  const isBlobUrl = /^blob:/i.test(url);
+  const parsedURL = parse(url.replace(/^blob:/i, ''), true);
+
+  if (isBlobUrl) {
+    parsedURL.protocol = 'blob:' + parsedURL.protocol;
+  }
 
   if (parsedURL.protocol) {
     urlObject.protocol = parsedURL.protocol.substr(
@@ -69,8 +74,9 @@ export function parseURL(url: string): MockURL {
 }
 
 export function formatURL(url: MockURL): string {
+  const isBlobUrl = url.protocol && /^blob:/i.test(url.protocol);
   const obj = {
-    protocol: url.protocol,
+    protocol: url.protocol && url.protocol.replace(/^blob:/i, ''),
     auth:
       url.username && url.password
         ? `${url.username}:${url.password}`
@@ -81,5 +87,5 @@ export function formatURL(url: MockURL): string {
     query: url.query,
     hash: url.hash
   };
-  return format(obj);
+  return (isBlobUrl ? 'blob:' : '') + format(obj);
 }

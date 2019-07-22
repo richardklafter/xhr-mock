@@ -39,6 +39,13 @@ const valid: {[key: string]: MockURL} = {
     query: {
       foo: 'bar'
     }
+  },
+
+  'blob:https://www.example.com/b846952a-4944-4bbb-b564-e1e35888b092': {
+    protocol: 'blob:https',
+    host: 'www.example.com',
+    path: '/b846952a-4944-4bbb-b564-e1e35888b092',
+    query: {}
   }
 };
 
